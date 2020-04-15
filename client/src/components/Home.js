@@ -6,27 +6,26 @@ class Home extends Component{
   static contextType = ExercisesContext;
 
   state = {
-    exerciseType : 'lower body'
+    exerciseType : 'all'
   }
 
-  // componentDidMount() {
-  //   const exercises = this.context
+  switchExercise = (e) => {
+    const {value} = e.target;
+    this.setState({exerciseType:value})
+  }
 
-  // }
   render(){
-    console.log(this.context)
     return (
-      <Container>
-      <ul>
-        <li>All</li>
-        <li>Upper Body</li>
-        <li>Lower Body</li>
-      </ul>
-    {this.state.exerciseType === 'all' && this.context.length > 0 && this.context.map(exercise => <p key={exercise._id}>{exercise.name}</p>)}
+      <div>
+        <button type='button' value="all" onClick={this.switchExercise}>All</button>
+        <button type='button' value="upper body" onClick={this.switchExercise}>Upper Body</button>
+        <button type='button' value="lower body" onClick={this.switchExercise}>Lower Body</button>
+        <Container>
+          {this.state.exerciseType === 'all' && this.context.length > 0 && this.context.map(exercise => <p key={exercise._id}>{exercise.name}</p>)}
 
-    {this.context.map( (exercise) => exercise.type === this.state.exerciseType ? <p>{exercise.name}</p> :'' )}
-        {/* {this.context.length > 0 && this.context.map(exercise => <p key={exercise._id}>{exercise.name}</p>)} */}
-      </Container>
+          {this.context.map( (exercise) => exercise.type === this.state.exerciseType ? <p key={exercise._id}>{exercise.name}</p> :'' )}
+        </Container>
+      </div>
     )
   }
 }
