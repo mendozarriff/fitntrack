@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
-import  {Container, ListGroup, Form, Button, Jumbotron}  from 'react-bootstrap';
-import ExercisesContext from '../ExercisesContext'
+import  {Container, ListGroup, Form, Button, Jumbotron, Modal}  from 'react-bootstrap';
+import ExercisesContext from '../ExercisesContext';
+import MyVerticallyCenteredModal from './MyVerticallyCenteredModal';
 import _ from 'lodash';
+
+
 // const ExercisesContext = React.createContext()
 class Home extends Component{
   static contextType = ExercisesContext;
+  // const [modalShow, setModalShow] = React.useState(false);
 
   state = {
     exerciseType : 'all',
     exercisesPicked: [],
-    checked: {}
+    checked: {},
+    modalShow : false,
+    setModalShow : false,
+    modalTitle : '',
+    modalDescription: '',
+    modalGif: ''
   }
+
+  // const [modalShow, setModalShow] = React.useState(false);
 
   switchExercise = (e) => {
     const {value} = e.target;
@@ -47,15 +58,7 @@ class Home extends Component{
 
   handleSubmit = (e)=> {
     e.preventDefault();
-    const seen = new Set();
-    const filteredArr = this.state.exercisesPicked.filter(el => {
-      const duplicate = seen.has(el.id);
-      seen.add(el.id);
-      return !duplicate;
-    });
-
-    console.log('filteredArr',filteredArr)
-    // this.state.exercisesPicked.filter()
+    console.log(this.state.exercisesPicked)
   }
 
   displayExercises = () => {
@@ -66,7 +69,9 @@ class Home extends Component{
             {this.state.exerciseType === 'all' && this.context.length > 0 && this.context.map(exercise => <ListGroup.Item key={exercise._id}>
               <div className="d-flex justify-content-between align-items-center"> 
                 <p style={{textTransform:'capitalize', width: '30%'}}>{exercise.name}</p>
-                <p style={{width: '30%', textAlign:"center"}}>Learn More</p>
+                <p  style={{width: '30%', textAlign:"center"}}
+                    onClick={ () => this.setState({modalShow:true,modalTitle:exercise.name,modalDescription:exercise.description, modalGif: exercise.gif})}>Learn More</p>
+
                 <Form.Group style={{width: '30%', textAlign:"right"}} controlId="formBasicCheckbox">
                   <input 
                     type="checkbox" 
@@ -84,7 +89,8 @@ class Home extends Component{
             <ListGroup.Item key={exercise._id}>
               <div className="d-flex justify-content-between align-items-center"> 
                 <p style={{textTransform:'capitalize', width: '30%'}}>{exercise.name}</p>
-                <p style={{width: '30%', textAlign:"center"}}>Learn More</p>
+                <p style={{width: '30%', textAlign:"center"}}
+                onClick={ () => this.setState({modalShow:true,modalTitle:exercise.name,modalDescription:exercise.description, modalGif: exercise.gif})}>Learn More</p>
                 <Form.Group style={{width: '30%', textAlign:"right"}} controlId="formBasicCheckbox">
                   <input 
                     type="checkbox"
@@ -105,7 +111,6 @@ class Home extends Component{
 
 
   render(){
-    console.log('exercisesPicked: ',this.state.exercisesPicked)
     return (
       <div>
         <Jumbotron className="exercise_types" style={{textAlign:'center'}}>
@@ -114,6 +119,13 @@ class Home extends Component{
           <Button variant="primary" size="lg" type='button' value="lower body" onClick={this.switchExercise}>Lower Body</Button>
         </Jumbotron>
         {this.displayExercises()}
+        <MyVerticallyCenteredModal
+          show={this.state.modalShow}
+          onHide={() => this.setState({modalShow:false, modalTitle:'',modalDescription:'',modalGif:'' })}
+          modalTitle={this.state.modalTitle}
+          modalDescription={this.state.modalDescription}
+          modalGif = {this.state.modalGif}
+        /> 
       </div>
     )
   }

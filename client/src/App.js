@@ -15,12 +15,6 @@ class App extends Component {
     exercises : []
   }
 
-  // getExercises(){
-  //   fetch('http://localhost:5000')
-  //   .then(res => res.json())
-  //   .then(res => this.setState({exercises: res}))
-  // }
-
   componentDidMount(){
     fetch('http://localhost:5000')
     .then(res => res.json())
@@ -36,8 +30,6 @@ class App extends Component {
       <ExercisesProvider value={exercises}>
       <Home />
       </ExercisesProvider>
-      {/* <Home exercises={this.state.exercises} /> */}
-        {/* {this.state.exercises.length > 0 && this.state.exercises.map(exercise => <p key={exercise._id}>{exercise.name}</p>)} */}
       </div>
       
     );
