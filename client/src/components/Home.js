@@ -61,7 +61,7 @@ class Home extends Component{
   handleSubmit = (e)=> {
     e.preventDefault();
     const {exercisesPicked} = this.state;
-    // sessionStorage.set('exercisesPicked', JSON.stringify(exercisesPicked));
+    sessionStorage.setItem('exercisesPicked', JSON.stringify(exercisesPicked));
     this.props.history.push("/set-workout");
   }
 

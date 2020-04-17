@@ -1,48 +1,43 @@
 import React, { Component } from 'react';
+import  {Container, ListGroup, Form, Button, Jumbotron, Modal,Table}  from 'react-bootstrap';
+import {withRouter , Link} from "react-router-dom";
 
 class SetWorkout extends Component {
 
-  constructor(props){
-    super(props)
-
-   
+  state = {
+    exercisesPicked: sessionStorage.getItem('exercisesPicked') ? JSON.parse(sessionStorage.getItem('exercisesPicked')) : []
   }
   render(){
-    // let match = useRouteMatch("/blog/:slug");
-    console.log(this.props)
-    return (
-      <div>
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
-        workout
 
+    const {exercisesPicked} = this.state
+    return (
+      <div style={{marginTop: '80px'}}>
+       <Form>
+       {exercisesPicked.length > 0 ? 
+        <Table responsive striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            {exercisesPicked.map(exercise =>
+              <tr key={exercise.id}>
+                <td>{exercise.name}</td>
+                <td>sets</td>
+                <td>reps</td>
+                <td>weight</td>
+              </tr>
+            )}
+          </tbody>
+        </Table> : 
+          <p>No workout available.  Please go <Link to='/'>back</Link> to select exercises</p>}
+       </Form>
       </div>
     )
   }
 }
-
-// function Workout(props){
-//   // let match = useRouteMatch("/workout/:slug");
-//   console.log('test', props)
-//   // console.log(props.match.params.selected_workout)
-//   return (
-//     <div>Workout</div>
-//   )
-// }
-
 export default SetWorkout;
