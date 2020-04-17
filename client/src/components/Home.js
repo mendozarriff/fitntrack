@@ -66,12 +66,14 @@ class Home extends Component{
   }
 
   displayExercises = () => {
-  
+    // const allExercises  = this.context
+    const allExercises = _.orderBy(this.context,['name'], ['asc']);
+   
     return (
       <Container className="exercises">
         <Form onSubmit={this.handleSubmit}>
         <ListGroup>
-            {this.state.exerciseType === 'all' && this.context.length > 0 && this.context.map(exercise => <ListGroup.Item key={exercise._id}>
+            {this.state.exerciseType === 'all' && allExercises.length > 0 && allExercises.map(exercise => <ListGroup.Item key={exercise._id}>
               <div className="d-flex justify-content-between align-items-center"> 
                 <p style={{textTransform:'capitalize', width: '30%'}}>{exercise.name}</p>
                 <p  style={{width: '30%', textAlign:"center"}}
@@ -90,7 +92,7 @@ class Home extends Component{
               </div>
             </ListGroup.Item>)}
 
-            {this.context.map( (exercise) => exercise.type === this.state.exerciseType ? 
+            {allExercises.map( (exercise) => exercise.type === this.state.exerciseType ? 
             <ListGroup.Item key={exercise._id}>
               <div className="d-flex justify-content-between align-items-center"> 
                 <p style={{textTransform:'capitalize', width: '30%'}}>{exercise.name}</p>
