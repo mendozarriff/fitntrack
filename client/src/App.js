@@ -6,14 +6,26 @@ import 'bootswatch/dist/darkly/bootstrap.min.css';
 import TopNavbar from './components/TopNavbar';
 import Home from './components/Home';
 import { ExercisesProvider } from './ExercisesContext';
+import { ExercisesPickedProvider } from './ExercisesPickedContext';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import SetWorkout from './components/SetWorkout';
 
 // const ExercisesContext = React.createContext()
 
 class App extends Component {
 
   state = {
-    exercises : []
+    exercises : [],
+    exercisesPicked : []
   }
+
+  // setExercisesPicked = () => {
+
+  // }
 
   componentDidMount(){
     fetch('http://localhost:5000')
@@ -26,10 +38,22 @@ class App extends Component {
     return (
       
       <div className="App">
-      <TopNavbar />
-      <ExercisesProvider value={exercises}>
-      <Home />
-      </ExercisesProvider>
+      <Router>
+        <TopNavbar />
+        <Switch>
+          <Route path="/set-workout">
+            {/* <ExercisesPickedProvider value={exercisesPicked}> */}
+              <SetWorkout />
+            {/* </ExercisesPickedProvider> */}
+          </Route>
+          <Route path="/">
+            <ExercisesProvider value={exercises}>
+            <Home />
+            </ExercisesProvider>
+          </Route>
+          
+        </Switch>
+      </Router>
       </div>
       
     );

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import  {Container, ListGroup, Form, Button, Jumbotron, Modal}  from 'react-bootstrap';
 import ExercisesContext from '../ExercisesContext';
-import MyVerticallyCenteredModal from './MyVerticallyCenteredModal';
+import ExerciseDescriptionModal from './ExerciseDescriptionModal';
 import _ from 'lodash';
+import {withRouter , Link} from "react-router-dom";
 
 
 // const ExercisesContext = React.createContext()
@@ -18,7 +19,8 @@ class Home extends Component{
     setModalShow : false,
     modalTitle : '',
     modalDescription: '',
-    modalGif: ''
+    modalGif: '',
+    aboutProps: {}
   }
 
   // const [modalShow, setModalShow] = React.useState(false);
@@ -58,10 +60,13 @@ class Home extends Component{
 
   handleSubmit = (e)=> {
     e.preventDefault();
-    console.log(this.state.exercisesPicked)
+    const {exercisesPicked} = this.state;
+    // sessionStorage.set('exercisesPicked', JSON.stringify(exercisesPicked));
+    this.props.history.push("/set-workout");
   }
 
   displayExercises = () => {
+  
     return (
       <Container className="exercises">
         <Form onSubmit={this.handleSubmit}>
@@ -111,6 +116,7 @@ class Home extends Component{
 
 
   render(){
+    
     return (
       <div>
         <Jumbotron className="exercise_types" style={{textAlign:'center'}}>
@@ -119,7 +125,7 @@ class Home extends Component{
           <Button variant="primary" size="lg" type='button' value="lower body" onClick={this.switchExercise}>Lower Body</Button>
         </Jumbotron>
         {this.displayExercises()}
-        <MyVerticallyCenteredModal
+        <ExerciseDescriptionModal
           show={this.state.modalShow}
           onHide={() => this.setState({modalShow:false, modalTitle:'',modalDescription:'',modalGif:'' })}
           modalTitle={this.state.modalTitle}
@@ -131,4 +137,4 @@ class Home extends Component{
   }
 }
 
-export default Home;
+export default withRouter(Home);

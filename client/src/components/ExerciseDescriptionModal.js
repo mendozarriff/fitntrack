@@ -1,7 +1,7 @@
 import React from 'react';
 import  {Button, Modal}  from 'react-bootstrap';
 
-function MyVerticallyCenteredModal(props) {
+function ExerciseDescriptionModal(props) {
   return (
     <Modal
       {...props}
@@ -10,7 +10,7 @@ function MyVerticallyCenteredModal(props) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Title style={{textTransform:"capitalize"}} id="contained-modal-title-vcenter">
           {props.modalTitle}
         </Modal.Title>
       </Modal.Header>
@@ -29,4 +29,4 @@ function MyVerticallyCenteredModal(props) {
   );
 }
 
-export default MyVerticallyCenteredModal;
+export default ExerciseDescriptionModal;
