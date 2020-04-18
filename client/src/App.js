@@ -13,6 +13,7 @@ import {
   Route
 } from "react-router-dom";
 import SetWorkout from './components/SetWorkout';
+import Dashboard from './components/Dashboard';
 
 // const ExercisesContext = React.createContext()
 
@@ -42,9 +43,10 @@ class App extends Component {
         <TopNavbar />
         <Switch>
           <Route path="/set-workout">
-            {/* <ExercisesPickedProvider value={exercisesPicked}> */}
               <SetWorkout />
-            {/* </ExercisesPickedProvider> */}
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
           <Route path="/">
             <ExercisesProvider value={exercises}>
