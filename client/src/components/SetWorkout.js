@@ -6,11 +6,7 @@ class SetWorkout extends Component {
 
   state = {
     exercisesPicked: sessionStorage.getItem('exercisesPicked') ? JSON.parse(sessionStorage.getItem('exercisesPicked')) : [],
-    exercises: {
-    },
-    sets : 0,
-    reps: 0,
-    weight: 0,
+    exercises: {},
     workout:[]
   }
 
@@ -32,7 +28,11 @@ class SetWorkout extends Component {
   
     const {name} = e.target
     if(this.state.exercises[name]){
-      return
+      this.setState({
+        exercises:{
+          [name]: this.state.exercises[name]
+        }
+      })
     }else{
       e.target.value = 0
     }
@@ -76,14 +76,15 @@ class SetWorkout extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.history.push("/dashboard");
+    fetch('http://localhost:5000/set-workout')
+    .then(res => res.json())
+    .then(res => console.log('test', res))
   }
   render(){
-    console.log(this.state.exercises)
     const {exercisesPicked} = this.state
     return (
       <div style={{marginTop: '80px'}}>
-       <Form onSubmit={this.handleSubmit}>
+       <Form onSubmit={this.handleSubmit} method="POST" action="/set-workout">
        {exercisesPicked.length > 0 ? 
        <>
         <h4>Please fill out the form</h4>
