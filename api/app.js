@@ -20,23 +20,12 @@ connection.once('open', () => {
 })
 
 const exercises = require('./routes/exercises')
-const workouts = require('./routes/workouts')
+const workout = require('./routes/workout')
 
-//Bodyparser
-// app.use(express.urlencoded({extended:false}))
-
-// app.use(logger('dev'));
-
-// app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', exercises);
-app.use('/workout', workouts);
+app.use('/workout', workout);
 
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
 
 
 const PORT = process.env.port || 5000;

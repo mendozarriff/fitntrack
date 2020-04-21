@@ -7,30 +7,57 @@ class SetWorkout extends Component {
   state = {
     exercisesPicked: sessionStorage.getItem('exercisesPicked') ? JSON.parse(sessionStorage.getItem('exercisesPicked')) : [],
     exercises: {},
-    workout:[]
+    workout:[],
   }
 
-  handleChange = (e) => {
+  handleChange = (id, e) => {
     const {name, value} = e.target
+    const nameID = id + "_" + name
+
+
     this.setState({
       exercises:{
         ...this.state.exercises,
-        [name]: parseInt(value)
-      }
+        [nameID]: parseInt(value),
+      },
+
+    });
+  }
+
+
+  handleFocus = (e) => {
+    e.target.value = ''
+  }
+
+  componentDidMount(){
+    
+    const {exercisesPicked} = this.state
+    const workout = []
+
+    for(let i=0; i<exercisesPicked.length; i++){
+      workout.push({
+        id: exercisesPicked[i].id,
+        name: exercisesPicked[i].name,
+        sets: 0,
+        reps: 0,
+        weight: 0
+      })
+    }
+    this.setState({
+      workout
     })
   }
 
-  handleFocus = (e) => {
-    e.target.value = '';
-  }
-
-  handleBlur = (e) => {
+  handleBlur = (id ,e) => {
   
-    const {name} = e.target
-    if(this.state.exercises[name]){
+    const {name, value} = e.target
+    const nameID = id + '_' + name;
+
+    if(value !==0){
       this.setState({
         exercises:{
-          [name]: this.state.exercises[name]
+          ...this.state.exercises,
+          [nameID]: this.state.exercises[nameID]
         }
       })
     }else{
@@ -38,49 +65,95 @@ class SetWorkout extends Component {
     }
   }
 
-  handleIncrement(name){
-    if(!this.state.exercises[name]){
+  handleIncrement(id, name){
+    const nameID = id + '_' + name;
+    if(!this.state.exercises[nameID]){
       this.setState({
         exercises:{
           ...this.state.exercises,
-          [name]: 1
+          [nameID]: 1
         },
-      })
+      });
     }else{
       this.setState({
         exercises:{
           ...this.state.exercises,
-          [name]: this.state.exercises[name]  + 1
+          [nameID]: this.state.exercises[nameID]  + 1
         },
       })
     }
   }
 
-  handleDecrement = (name) => {
-    if(!this.state.exercises[name]){
+  handleDecrement = (id, name) => {
+    const nameID = id + '_' + name;
+
+    if(!this.state.exercises[nameID]){
       this.setState({
         exercises:{
           ...this.state.exercises,
-          [name]: 0
+          [nameID]: 0
         },
       })
+      
     }else{
       this.setState({
         exercises:{
           ...this.state.exercises,
-          [name]: this.state.exercises[name]  - 1
+          [nameID]: this.state.exercises[nameID]  - 1
         },
       })
     }
+
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    fetch('http://localhost:5000/set-workout')
-    .then(res => res.json())
-    .then(res => console.log('test', res))
+
+    const exercises_picked= this.state.exercises;
+    const workout_to_submit = this.state.workout
+    const workout = {}
+
+    for(let key in exercises_picked){
+
+      for(let i=0; i<workout_to_submit.length; i++){
+         if(key.split('_').shift() === workout_to_submit[i].id && key.split('_').pop() === 'sets'){
+          workout_to_submit[i].sets = exercises_picked[key]
+        }
+        if(key.split('_').shift() === workout_to_submit[i].id && key.split('_').pop() === 'reps'){
+          workout_to_submit[i].reps = exercises_picked[key]
+        }
+        if(key.split('_').shift() === workout_to_submit[i].id && key.split('_').pop() === 'weight'){
+          workout_to_submit[i].weight = exercises_picked[key]
+        }
+      }
+    }
+
+
+
+    workout.id = "78945";
+    workout.userID = "544355hgf9";
+    workout.date = new Date()
+    workout.exercises = workout_to_submit
+
+
+
+    console.log(workout)
+
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({ workout })
+  // };
+
+  //   fetch('http://localhost:5000/workout', requestOptions)
+  //     .then(res => res.json())
+  //     .then(data => console.log('data: ', data.length))
+
   }
+
+ 
   render(){
+
     const {exercisesPicked} = this.state
     return (
       <div style={{marginTop: '80px'}}>
@@ -90,46 +163,46 @@ class SetWorkout extends Component {
         <h4>Please fill out the form</h4>
         <Table responsive striped bordered hover variant="dark">
           
-            {exercisesPicked.map(exercise =>
+            {exercisesPicked.map((exercise,index) =>
             <React.Fragment key={exercise.id}> 
               <thead><tr><th>{exercise.name}</th></tr></thead>
               <tbody>
                 <tr><td className="d-flex justify-content-around align-items-center"><p style={{width:'80px', textAlign:'right'}} >Sets:</p>
-                  <input onChange={this.handleChange}
+                  <input onChange={this.handleChange.bind(this, exercise.id)}
                           onFocus={this.handleFocus} 
-                          onBlur={this.handleBlur}
+                          onBlur={this.handleBlur.bind(this, exercise.id)}
                           style={{maxWidth:'50px', textAlign:'center'}} 
                           type="number"
-                          name={`${exercise.id}_sets`}
+                          name={`sets`}
                           value={this.state.exercises[`${exercise.id}_sets`] ? this.state.exercises[`${exercise.id}_sets`] : 0}
                           />
                   <div style={{width: '30%'}}>
-                    <Button onClick={this.handleIncrement.bind(this,`${exercise.id}_sets`)} type="button">+</Button> 
-                    <Button onClick={this.handleDecrement.bind(this,`${exercise.id}_sets`)} type="button">-</Button></div></td></tr>
+                    <Button onClick={this.handleIncrement.bind(this, exercise.id, 'sets')} type="button">+</Button> 
+                    <Button onClick={this.handleDecrement.bind(this, exercise.id, 'sets')} type="button">-</Button></div></td></tr>
                 <tr><td className="d-flex justify-content-around align-items-center"><p style={{width:'80px', textAlign:'right'}} >Reps:</p> 
-                <input onChange={this.handleChange} 
+                <input onChange={this.handleChange.bind(this, exercise.id)} 
                         onFocus={this.handleFocus} 
-                        onBlur={this.handleBlur}
+                        onBlur={this.handleBlur.bind(this, exercise.id)}
                         style={{maxWidth:'50px', textAlign:'center'}} 
                         type="number"
-                        name={`${exercise.id}_reps`}
+                        name={`reps`}
                         value={this.state.exercises[`${exercise.id}_reps`] ? this.state.exercises[`${exercise.id}_reps`]  : 0 } 
                         />
                 <div style={{width: '30%'}}>
-                  <Button onClick={this.handleIncrement.bind(this,`${exercise.id}_reps`)} type="button">+</Button> 
-                  <Button onClick={this.handleDecrement.bind(this,`${exercise.id}_reps`)} type="button">-</Button></div></td></tr>
+                  <Button onClick={this.handleIncrement.bind(this, exercise.id, 'reps')} type="button">+</Button> 
+                  <Button onClick={this.handleDecrement.bind(this, exercise.id, 'reps')} type="button">-</Button></div></td></tr>
                 <tr><td className="d-flex justify-content-around align-items-center"><p style={{width:'80px', textAlign:'right'}} >Weight:</p> 
-                <input onChange={this.handleChange}
+                <input onChange={this.handleChange.bind(this, exercise.id)}
                         onFocus={this.handleFocus} 
-                        onBlur={this.handleBlur} 
+                        onBlur={this.handleBlur.bind(this, exercise.id)} 
                         style={{maxWidth:'50px', textAlign:'center'}}
                         type="number"
-                        name={`${exercise.id}_weight`}
+                        name={`weight`}
                         value={this.state.exercises[`${exercise.id}_weight`] ? this.state.exercises[`${exercise.id}_weight`] : 0}
                         />
                 <div style={{width: '30%'}}>
-                  <Button onClick={this.handleIncrement.bind(this,`${exercise.id}_weight`)} type="button">+</Button> 
-                  <Button onClick={this.handleDecrement.bind(this,`${exercise.id}_weight`)} type="button">-</Button>
+                  <Button onClick={this.handleIncrement.bind(this, exercise.id, 'weight')} type="button">+</Button> 
+                  <Button onClick={this.handleDecrement.bind(this, exercise.id, 'weight')} type="button">-</Button>
                 </div></td></tr>
               </tbody>
 
