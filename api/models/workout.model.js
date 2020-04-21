@@ -10,7 +10,7 @@ const workoutSchema = new Schema({
     type: Date,
     default: Date.now()
   },
-  exercises_picked:[
+  exercises:[
     {
       exercise_id: {type:String,required:true},
       name: {type:String,required:true},

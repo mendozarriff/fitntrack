@@ -4,18 +4,34 @@ let Workout = require('../models/workout.model')
 
 
 router.route('/').post( (req, res) => {
-  const userID = req.body.workout.userID;
+
+  const {userID, exercises} = req.body.workout;
   const date = Date.parse(req.body.workout.date);
-  const exercises_picked = req.body.workout.workout_picked;
   const errors = [];
 
 
   console.log('userID: ', userID)
   console.log('date: ', date)
-  console.log('exercises_picked: ', exercises_picked)
-  // if(!userID || !date || !exercises_picked){
+  console.log('exercises_picked: ', exercises)
 
-  // }  
+  if(!userID){
+    errors.push({msg: 'You must logged in to save workout'})
+  }else if(!exercises){
+    errors.push({msg: 'Please go back to pick your exercises'})
+  }else if(exercises.length > 0){
+    for(let i=0; i<exercises.length; i++){
+      if(exercises[i].sets <= 0 || exercises[i].reps <= 0 ){
+        errors.push({msg: 'Plese fill your sets and reps'})
+      }
+    }
+  } 
+  if(errors.length > 0){
+    res.send(errors)
+  }else{
+    res.send(errors)
+  } 
+
+  
 
 //   const newWorkout = new Workout({
 //     userID,

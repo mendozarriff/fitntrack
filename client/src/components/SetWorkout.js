@@ -8,6 +8,7 @@ class SetWorkout extends Component {
     exercisesPicked: sessionStorage.getItem('exercisesPicked') ? JSON.parse(sessionStorage.getItem('exercisesPicked')) : [],
     exercises: {},
     workout:[],
+    errors : []
   }
 
   handleChange = (id, e) => {
@@ -30,7 +31,7 @@ class SetWorkout extends Component {
   }
 
   componentDidMount(){
-    
+
     const {exercisesPicked} = this.state
     const workout = []
 
@@ -130,30 +131,31 @@ class SetWorkout extends Component {
 
 
 
-    workout.id = "78945";
-    workout.userID = "544355hgf9";
+    // workout.id = "78945";
+    workout.userID = "1564156";
     workout.date = new Date()
     workout.exercises = workout_to_submit
 
 
 
-    console.log(workout)
+    // console.log(workout)
 
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ workout })
-  // };
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ workout })
+  };
 
-  //   fetch('http://localhost:5000/workout', requestOptions)
-  //     .then(res => res.json())
-  //     .then(data => console.log('data: ', data.length))
+    fetch('http://localhost:5000/workout', requestOptions)
+      .then(res => res.json())
+      .then( data => this.setState({errors: data}))
+      // .then(data => console.log('data: ', data))
 
   }
 
  
   render(){
-
+  
     const {exercisesPicked} = this.state
     return (
       <div style={{marginTop: '80px'}}>
@@ -161,6 +163,7 @@ class SetWorkout extends Component {
        {exercisesPicked.length > 0 ? 
        <>
         <h4>Please fill out the form</h4>
+        {this.state.errors[0] && this.state.errors[0].msg}
         <Table responsive striped bordered hover variant="dark">
           
             {exercisesPicked.map((exercise,index) =>
@@ -205,7 +208,7 @@ class SetWorkout extends Component {
                   <Button onClick={this.handleDecrement.bind(this, exercise.id, 'weight')} type="button">-</Button>
                 </div></td></tr>
               </tbody>
-
+              
             </React.Fragment>
             )}
         </Table></> : 
