@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import  {Container, ListGroup, Form, Button, Jumbotron, Modal,Table}  from 'react-bootstrap';
+import  {Container, ListGroup, Form, Button, Jumbotron, Modal,Table, Alert}  from 'react-bootstrap';
 import {withRouter , Link} from "react-router-dom";
 
 class SetWorkout extends Component {
@@ -8,7 +8,8 @@ class SetWorkout extends Component {
     exercisesPicked: sessionStorage.getItem('exercisesPicked') ? JSON.parse(sessionStorage.getItem('exercisesPicked')) : [],
     exercises: {},
     workout:[],
-    errors : []
+    errors : [],
+    showError: false,
   }
 
   handleChange = (id, e) => {
@@ -137,9 +138,6 @@ class SetWorkout extends Component {
     workout.exercises = workout_to_submit
 
 
-
-    // console.log(workout)
-
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -148,7 +146,7 @@ class SetWorkout extends Component {
 
     fetch('http://localhost:5000/workout', requestOptions)
       .then(res => res.json())
-      .then( data => this.setState({errors: data}))
+      .then( data => data.length > 0 && this.setState({errors: data , showError: true}))
       // .then(data => console.log('data: ', data))
 
   }
@@ -163,7 +161,13 @@ class SetWorkout extends Component {
        {exercisesPicked.length > 0 ? 
        <>
         <h4>Please fill out the form</h4>
-        {this.state.errors[0] && this.state.errors[0].msg}
+       {this.state.showError && 
+        <Alert variant='danger' onClose={() => this.setState({showError:false})} dismissible>
+          <Alert.Heading>
+            {this.state.errors[0].msg}
+          </Alert.Heading>
+        </Alert>
+       }
         <Table responsive striped bordered hover variant="dark">
           
             {exercisesPicked.map((exercise,index) =>
@@ -213,7 +217,7 @@ class SetWorkout extends Component {
             )}
         </Table></> : 
           <p>No workout available.  Please go <Link to='/'>back</Link> to select exercises</p>}
-          <Button type='submit'>Submit</Button>
+          <Button type='submit'>Save Workout</Button>
        </Form>
       </div>
     )

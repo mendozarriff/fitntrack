@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootswatch/dist/darkly/bootstrap.min.css';
 import TopNavbar from './components/TopNavbar';
 import Home from './components/Home';
+import Register from './components/Register';
 import { ExercisesProvider } from './ExercisesContext';
 import { ExercisesPickedProvider } from './ExercisesPickedContext';
 import {
@@ -44,6 +45,9 @@ class App extends Component {
         <Switch>
           <Route path="/set-workout">
               <SetWorkout />
+          </Route>
+          <Route path="/register">
+              <Register />
           </Route>
           <Route path="/dashboard">
             <Dashboard />

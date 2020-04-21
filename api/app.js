@@ -21,10 +21,12 @@ connection.once('open', () => {
 
 const exercises = require('./routes/exercises')
 const workout = require('./routes/workout')
+const register = require('./routes/register')
 
 
 app.use('/', exercises);
 app.use('/workout', workout);
+app.use('/register', register);
 
 
 

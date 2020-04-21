@@ -15,7 +15,7 @@ router.route('/').post( (req, res) => {
   console.log('exercises_picked: ', exercises)
 
   if(!userID){
-    errors.push({msg: 'You must logged in to save workout'})
+    errors.push({msg: 'You must be logged in to save workouts'})
   }else if(!exercises){
     errors.push({msg: 'Please go back to pick your exercises'})
   }else if(exercises.length > 0){
