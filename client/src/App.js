@@ -7,6 +7,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import TopNavbar from './components/TopNavbar';
 import Home from './components/Home';
 import Register from './components/Register';
+import Login from './components/Login';
 import { ExercisesProvider } from './ExercisesContext';
 import { ExercisesPickedProvider } from './ExercisesPickedContext';
 import {
@@ -49,6 +50,9 @@ class App extends Component {
           </Route>
           <Route path="/register">
               <Register />
+          </Route>
+          <Route path="/login">
+              <Login />
           </Route>
           <Route path="/dashboard">
             <Dashboard />

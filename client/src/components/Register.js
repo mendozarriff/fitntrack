@@ -149,7 +149,7 @@ class Register extends Component{
                 
               </button>
             </form>
-            <p className="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+            <p className="lead mt-4">Have An Account? <Link to="/login">Log in</Link></p>
           </div>
         </div>
       </div>

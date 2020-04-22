@@ -18,7 +18,7 @@ function TopNavbar(){
         <Nav className="pull-right">
           <LinkContainer to='/set-workout'><NavItem className="pl-4">Set Workout</NavItem></LinkContainer>
           <LinkContainer to='/dashboard'><NavItem className="pl-4">Dashboard</NavItem></LinkContainer>
-          <LinkContainer to='/register'><NavItem className="pl-4">Register</NavItem></LinkContainer>
+          <LinkContainer to='/login'><NavItem className="pl-4">Login</NavItem></LinkContainer>
         </Nav>
       </Navbar.Collapse>
 </Navbar>
