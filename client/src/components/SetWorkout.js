@@ -147,6 +147,7 @@ class SetWorkout extends Component {
     fetch('http://localhost:5000/workout', requestOptions)
       .then(res => res.json())
       .then( data => data.length > 0 && this.setState({errors: data , showError: true}))
+      .catch( err => console.log(err))
       // .then(data => console.log('data: ', data))
 
   }
@@ -162,7 +163,7 @@ class SetWorkout extends Component {
        <>
         <h4>Please fill out the form</h4>
        {this.state.showError && 
-        <Alert variant='danger' onClose={() => this.setState({showError:false})} dismissible>
+        <Alert variant='warning' onClose={() => this.setState({showError:false})} dismissible>
           <Alert.Heading>
             {this.state.errors[0].msg}
           </Alert.Heading>

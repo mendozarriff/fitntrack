@@ -1,28 +1,58 @@
 import React, { Component } from 'react';
+import  {Container, ListGroup, Form, Button, Jumbotron, Modal,Table, Alert}  from 'react-bootstrap';
+import {withRouter , Link} from "react-router-dom";
+// import  loader  from '../loader.gif';
+import Loader from 'react-loader-spinner'
 
 class Register extends Component{
 
   state = {
-    name : '',
-    email : '',
-    password : '',
-    password2: ''
+    newUser : {
+      name : '',
+      email : '',
+      password : '',
+      password2: ''
+      
+    },
+    errors:[],
+    visible: false,
+    disable: false,
+    showSpinner: false
   }
 
   handleChange = (e) => {
     const { name, value } = e.target
 
     this.setState({
-      [name]:value
+      newUser:{
+        ...this.state.newUser,
+        [name]:value
+      },
+      
+    })
+  }
+
+  registerNewUser = () => {
+    this.setState({
+      disable: true,
+      showSpinner: true
     })
 
+    setTimeout(
+      function() {
+        this.props.history.push("/dashboard")
+      }
+      .bind(this),
+      2000
+  );
+    
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
     console.log(this.state);
 
-    const newUser = this.state;
+    const {newUser} = this.state;
 
     const requestOptions = {
       method:'POST',
@@ -32,72 +62,94 @@ class Register extends Component{
 
     fetch('http://localhost:5000/register',requestOptions)
       .then(res => res.json())
-      .then( data => console.log(data) )
-
+      .then( data => data.errors ? this.setState({errors: data.errors, visible:true}) : this.registerNewUser() )
+      .catch(err => console.log(err))
   }
   render(){
+    console.log(this.state.errors)
     return(
       <div style={{marginTop: '80px'}}>
-      <div class="row mt-5">
-        <div class="col-md-6 m-auto">
-          <div class="card card-body">
-            <h1 class="text-center mb-3">
-              <i class="fas fa-user-plus"></i> Register
+      <div className="row mt-5">
+        <div className="col-md-6 m-auto">
+          <div className="card card-body">
+            <h1 className="text-center mb-3">
+              <i className="fas fa-user-plus"></i> Register
             </h1>
-            <form onSubmit={this.handleSubmit} action="/users/register" method="POST">
-              <div class="form-group">
-                <label for="name">Name</label>
+            {this.state.errors && this.state.visible && this.state.errors.map((error, i) =>
+    
+              <Alert key={i} variant="danger" refs="test"  onClose={ () => this.setState({visible:false})} dismissible>
+                <p>
+                  {error.msg}
+                </p>
+              </Alert> )}
+           
+            <form onSubmit={this.handleSubmit} action="/users/register"  method="POST">
+              <div className="form-group">
+                <label htmlFor="name">Name</label>
                 <input
                   type="name"
                   id="name"
                   name="name"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Enter Name"
-                  value = {this.state.name}
+                  value = {this.state.newUser.name}
                   onChange={this.handleChange}
+                  autoComplete="name"
                 />
               </div>
-              <div class="form-group">
-                <label for="email">Email</label>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Enter Email"
-                  value = {this.state.email}
+                  value = {this.state.newUser.email}
                   onChange={this.handleChange}
+                  autoComplete="email"
                 />
               </div>
-              <div class="form-group">
-                <label for="password">Password</label>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
                 <input
                   type="password"
                   id="password"
                   name="password"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Create Password"
-                  value = {this.state.password}
+                  value = {this.state.newUser.password}
                   onChange={this.handleChange}
                 />
               </div>
-              <div class="form-group">
-                <label for="password2">Confirm Password</label>
+              <div className="form-group">
+                <label htmlFor="password2">Confirm Password</label>
                 <input
                   type="password"
                   id="password2"
                   name="password2"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Confirm Password"
-                  value = {this.state.password2}
+                  value = {this.state.newUser.password2}
                   onChange={this.handleChange}
                 />
               </div>
-              <button type="submit" class="btn btn-primary btn-block">
+              <button disabled={this.state.disable} type="submit" style={{position:'relative'}} className="btn btn-primary btn-block">
                 Register
+               
+                  <Loader
+                style={{position: 'absolute', top:'-3px', right:'5px'}}
+                type="Rings"
+                color="white"
+                height={40}
+                width={40}
+                visible={this.state.showSpinner}
+              />
+               
+                
               </button>
             </form>
-            <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+            <p className="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
           </div>
         </div>
       </div>
@@ -106,4 +158,4 @@ class Register extends Component{
   }
 }
 
-export default Register;
+export default withRouter(Register);

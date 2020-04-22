@@ -20,6 +20,14 @@
     background: #191919!important;
 }
 
+.custom_alert.hide{
+  display: none!important;
+}
+
+.custom_alert.show{
+  display: block!important;
+}
+
 /* .list-group{
   padding-top: 135px;
 } */
