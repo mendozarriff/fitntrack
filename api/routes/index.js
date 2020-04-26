@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth')
 
-let Exercise = require('../models/exercise.model');
+const Exercise = require('../models/exercise.model');
+const Workout = require('../models/workout.model');
 
 router.route('/').get( (req, res) => {
 
@@ -13,7 +14,11 @@ router.route('/').get( (req, res) => {
 
 
 router.get('/dashboard',ensureAuthenticated ,(req, res) => {
-    res.send({user: req.user, authorized: true})
+    // res.send({user: req.user, authorized: true})
+
+    Workout.find({'userID': req.user.id})
+    .then(data => res.json({workouts: data, user: req.user, authorized: true}) )
+    .catch(err => res.status(400).json('Error: ' + err))
   }
 );
 

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap'
+import { Button, Container, Table } from 'react-bootstrap'
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 
 class Dashboard extends Component {
 
@@ -11,7 +12,8 @@ class Dashboard extends Component {
       id:'',
       email:'',
       authorized: false
-    }
+    },
+    workouts : []
   }
   // fetches the data coming from index route, data was posted from router /login
   componentDidMount(){
@@ -26,7 +28,9 @@ class Dashboard extends Component {
           id: data.user._id,
           email: data.user.email,
           authorized: data.authorized
-      }});
+        },
+        workouts: data.workouts
+      });
       //updates the state coming from a function from App.js
       //this is done to have this data available on parent component App
        this.props.updateUser(data.user)  
@@ -56,17 +60,48 @@ class Dashboard extends Component {
   render(){
     return(
       <div style={{marginTop: '100px'}}>
+      <Container>
       <h1>Dashboard</h1>
       {this.state.user.authorized ? 
       <div>
       
         <h3>{this.state.user.name}</h3>
-        <h4>{this.state.user.id}</h4>
+        <div>
+        <h2>Workouts</h2>
+        {this.state.workouts.length > 0 ? this.state.workouts.map(workout => 
+          
+            <Table key={workout._id} striped bordered hover size="sm">
+              <thead>
+                <tr style={{background:'yellow', color:'black'}}>
+                  <th colSpan="12">{moment(workout.date).format('LL')}</th>
+                </tr>
+                <tr>
+                  <th>Name</th>
+                  <th>Sets</th>
+                  <th>Reps</th>
+                  <th>Weight</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+            {workout.exercises.map( exercise => 
+                <tr key={exercise._id}>
+                  <td>{exercise.name}</td>
+                  <td>{exercise.sets}</td>
+                  <td>{exercise.reps}</td>
+                  <td>{exercise.weight}</td>
+                </tr>
+            )}
+              </tbody>
+            </Table>
+        ) : <p>You have no workouts</p>}
+        </div>
+
         <Button onClick={this.handleLogout}>Logout</Button>
       </div> : 
       <div>Protected Page</div>
       }
- 
+      </Container>
       </div>
     
     )

@@ -148,12 +148,6 @@ class SetWorkout extends Component {
     workout.exercises = workout_to_submit
 
 
-
-    console.log(workout)
-
-
-
-
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -163,7 +157,6 @@ class SetWorkout extends Component {
     fetch('http://localhost:5000/workout', requestOptions)
       .then(res => res.json())
       .then( data => this.validateWorkout(data))
-      // .then( data => data.length > 0 && this.setState({errors: data , showError: true}) )
       .catch( err => console.log(err))
 
   }
