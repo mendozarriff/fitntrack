@@ -12,7 +12,7 @@ const workoutSchema = new Schema({
   },
   exercises:[
     {
-      exercise_id: {type:String,required:true},
+      id: {type:String,required:true},
       name: {type:String,required:true},
       sets: {type:Number, required: true},
       reps: {type:Number, required:true} ,

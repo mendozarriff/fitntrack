@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import  {Container, ListGroup, Form, Button, Jumbotron, Modal,Table, Alert}  from 'react-bootstrap';
+import  {Button, Form, Table, Alert}  from 'react-bootstrap';
 import {withRouter , Link} from "react-router-dom";
 
 class SetWorkout extends Component {
@@ -10,6 +10,7 @@ class SetWorkout extends Component {
     workout:[],
     errors : [],
     showError: false,
+    userID:''
   }
 
   handleChange = (id, e) => {
@@ -108,6 +109,15 @@ class SetWorkout extends Component {
 
   }
 
+  validateWorkout = (data) => {
+    if(data.length > 0){
+      this.setState({errors: data , showError: true})
+    }else{
+      sessionStorage.removeItem('exercisesPicked');
+      this.props.history.push('/dashboard')
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
 
@@ -133,9 +143,15 @@ class SetWorkout extends Component {
 
 
     // workout.id = "78945";
-    workout.userID = "1564156";
+    workout.userID = this.props.userID;
     workout.date = new Date()
     workout.exercises = workout_to_submit
+
+
+
+    console.log(workout)
+
+
 
 
     const requestOptions = {
@@ -146,15 +162,15 @@ class SetWorkout extends Component {
 
     fetch('http://localhost:5000/workout', requestOptions)
       .then(res => res.json())
-      .then( data => data.length > 0 && this.setState({errors: data , showError: true}))
+      .then( data => this.validateWorkout(data))
+      // .then( data => data.length > 0 && this.setState({errors: data , showError: true}) )
       .catch( err => console.log(err))
-      // .then(data => console.log('data: ', data))
 
   }
 
  
   render(){
-  
+    // console.log('this.props.userID: ',this.props.userID)
     const {exercisesPicked} = this.state
     return (
       <div style={{marginTop: '80px'}}>

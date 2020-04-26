@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import  {Container, ListGroup, Form, Button, Jumbotron, Modal}  from 'react-bootstrap';
+import  {Container, ListGroup, Form, Button, Jumbotron}  from 'react-bootstrap';
 import ExercisesContext from '../ExercisesContext';
 import ExerciseDescriptionModal from './ExerciseDescriptionModal';
 import _ from 'lodash';
-import {withRouter , Link} from "react-router-dom";
+import {withRouter } from "react-router-dom";
 
 
 // const ExercisesContext = React.createContext()
@@ -68,9 +68,10 @@ class Home extends Component{
   displayExercises = () => {
     // const allExercises  = this.context
     const allExercises = _.orderBy(this.context,['name'], ['asc']);
-   
+  
     return (
       <Container className="exercises">
+      {/* <h1>{this.props.user}</h1> */}
         <Form onSubmit={this.handleSubmit}>
         <ListGroup>
             {this.state.exerciseType === 'all' && allExercises.length > 0 && allExercises.map(exercise => <ListGroup.Item key={exercise._id}>
@@ -118,9 +119,10 @@ class Home extends Component{
 
 
   render(){
-    
+    // console.log()
     return (
       <div>
+      {/* <h1>{this.props.user && this.props.user.name}</h1> */}
         <Jumbotron className="exercise_types" style={{textAlign:'center'}}>
           <Button variant="primary" size="lg" type='button' value="all" onClick={this.switchExercise}>All</Button>{'  '}
           <Button variant="primary" size="lg" type='button' value="upper body" onClick={this.switchExercise}>Upper Body</Button>{'  '}

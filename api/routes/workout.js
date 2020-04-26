@@ -28,7 +28,14 @@ router.route('/').post( (req, res) => {
   if(errors.length > 0){
     res.send(errors)
   }else{
-    res.send(errors)
+    const newWorkout = new Workout({
+      userID,
+      date,
+      exercises
+    });
+    res.send({isWorkoutSaved: true})
+    newWorkout.save();
+    // res.send(errors)
   } 
 
   
