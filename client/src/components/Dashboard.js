@@ -13,7 +13,8 @@ class Dashboard extends Component {
       email:'',
       authorized: false
     },
-    workouts : []
+    workouts : [],
+    filter: 'today'
   }
   // fetches the data coming from index route, data was posted from router /login
   componentDidMount(){
@@ -56,20 +57,46 @@ class Dashboard extends Component {
         }
       }).catch( err =>  console.log('err: ', err))
   }
+  viewWorkouts = (filter) => {
+    let today = new Date();
+    today = moment(today).format('MM-DD-YYYY')
+    let filteredworkout = []
+    if(filter === "all"){
+     return this.state.workouts.length > 0 ? this.state.workouts.map(workout => 
+         
+        <Table key={workout._id} striped bordered hover size="sm">
+        {/* {console.log('today: ',moment(today).format('MM-DD-YYYY') === moment(workout.date).format('MM-DD-YYYY') )} */}
+          <thead>
+            <tr style={{background:'yellow', color:'black'}}>
+              <th colSpan="12">{moment(workout.date).format('LL')}</th>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        {workout.exercises.map( exercise => 
+            <tr key={exercise._id}>
+              <td>{exercise.name}</td>
+              <td>{exercise.sets}</td>
+              <td>{exercise.reps}</td>
+              <td>{exercise.weight}</td>
+            </tr>
+        )}
+          </tbody>
+        </Table>
+    ) : <p>You have no workouts</p>
+    }
 
-  render(){
-    return(
-      <div style={{marginTop: '100px'}}>
-      <Container>
-      <h1>Dashboard</h1>
-      {this.state.user.authorized ? 
-      <div>
-      
-        <h3>{this.state.user.name}</h3>
-        <div>
-        <h2>Workouts</h2>
-        {this.state.workouts.length > 0 ? this.state.workouts.map(workout => 
-          
+    if(filter === "today"){
+     filteredworkout = this.state.workouts.filter(workout => 
+          moment(workout.date).format('MM-DD-YYYY') === today);
+          return filteredworkout.length > 0 ? filteredworkout.map(workout => 
+         
             <Table key={workout._id} striped bordered hover size="sm">
               <thead>
                 <tr style={{background:'yellow', color:'black'}}>
@@ -94,7 +121,30 @@ class Dashboard extends Component {
             )}
               </tbody>
             </Table>
-        ) : <p>You have no workouts</p>}
+        ): <p> You have no workout for today </p>
+    }
+  }
+
+
+
+  render(){
+    return(
+      <div style={{marginTop: '100px'}}>
+      <Container>
+      <h1>Dashboard</h1>
+      {this.state.user.authorized ? 
+      <div>
+      
+        <h3>{this.state.user.name}</h3>
+        <div>
+        <h2>Workouts</h2>
+        <div>
+          <Button active={this.state.filter === 'today'} onClick={ () => this.setState({filter:'today'}) }>Todays Workout</Button>
+          <Button active={this.state.filter === 'all'} onClick={ () => this.setState({filter:'all'}) }>View All Workouts</Button>
+        </div>
+
+        {this.viewWorkouts(this.state.filter)}
+        
         </div>
 
         <Button onClick={this.handleLogout}>Logout</Button>
