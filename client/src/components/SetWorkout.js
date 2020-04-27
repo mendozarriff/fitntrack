@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import  {Button, Form, Table, Alert}  from 'react-bootstrap';
 import {withRouter , Link} from "react-router-dom";
+import WorkoutModal from './WorkoutModal';
 
 class SetWorkout extends Component {
 
@@ -10,7 +11,8 @@ class SetWorkout extends Component {
     workout:[],
     errors : [],
     showError: false,
-    userID:''
+    userID:'',
+    modalShow : false,
   }
 
   handleChange = (id, e) => {
@@ -110,12 +112,29 @@ class SetWorkout extends Component {
   }
 
   validateWorkout = (data) => {
+
     if(data.length > 0){
       this.setState({errors: data , showError: true})
+    }else if(data.workoutExists){
+      this.setState({modalShow:true})
     }else{
       sessionStorage.removeItem('exercisesPicked');
       this.props.history.push('/dashboard')
     }
+  }
+
+  updateWorkout = () => {
+    const { workout } = this.state;
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ workout })
+    };
+
+    fetch('http://localhost:5000/workout', requestOptions)
+      .then(res => res.json())
+      .then( data => this.validateWorkout(data))
+      .catch( err => console.log(err))
   }
 
   handleSubmit = (e) => {
@@ -156,8 +175,10 @@ class SetWorkout extends Component {
 
     fetch('http://localhost:5000/workout', requestOptions)
       .then(res => res.json())
-      .then( data => this.validateWorkout(data))
+      .then( data => this.validateWorkout(data, workout))
       .catch( err => console.log(err))
+      // .then( data => console.log('data: ', data))
+      // .catch( err => console.log(err))
 
   }
 
@@ -225,10 +246,17 @@ class SetWorkout extends Component {
               
             </React.Fragment>
             )}
-        </Table></> : 
+        </Table>
+        <Button type='submit'>Save Workout</Button>
+        </> : 
           <p>No workout available.  Please go <Link to='/'>back</Link> to select exercises</p>}
-          <Button type='submit'>Save Workout</Button>
+          
        </Form>
+       <WorkoutModal 
+           show={this.state.modalShow}
+           onHide={() => this.setState({modalShow:false})}
+           updateWorkout = {this.updateWorkout}
+       />
       </div>
     )
   }

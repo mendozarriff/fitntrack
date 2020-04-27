@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 let Workout = require('../models/workout.model')
 
 
@@ -8,7 +9,14 @@ router.route('/').post( (req, res) => {
   const {userID, exercises} = req.body.workout;
   const date = Date.parse(req.body.workout.date);
   const errors = [];
+  let workoutExists = false
 
+
+  
+  const start = new Date();
+  start.setHours(0,0,0,0)
+  const end = new Date();
+  end.setHours(23,59,59,9999)
 
   if(!userID){
     errors.push({msg: 'You must be logged in to save workouts'})
@@ -20,17 +28,28 @@ router.route('/').post( (req, res) => {
         errors.push({msg: 'Plese fill your sets and reps'})
       }
     }
-  } 
+  }
+  
+
   if(errors.length > 0){
     res.send(errors)
   }else{
-    const newWorkout = new Workout({
-      userID,
-      date,
-      exercises
-    });
-    res.send({isWorkoutSaved: true})
-    newWorkout.save();
+    
+    Workout.find({'userID':userID, date: {$gte: start, $lt:end} })
+    .then( data => {
+      if (data.length > 0){
+        res.send({workoutExists: true})
+      }else{
+        const newWorkout = new Workout({
+          userID,
+          date,
+          exercises
+        });
+        res.send({isWorkoutSaved: true})
+        newWorkout.save();
+      }
+    })
+    .catch(err => console.log('err: ',err))
   } 
 });
 
