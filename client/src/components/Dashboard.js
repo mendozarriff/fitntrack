@@ -3,6 +3,7 @@ import { Button, Container, Table } from 'react-bootstrap'
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
+import _ from 'lodash';
 
 class Dashboard extends Component {
 
@@ -61,8 +62,15 @@ class Dashboard extends Component {
     let today = new Date();
     today = moment(today).format('MM-DD-YYYY')
     let filteredworkout = []
+
+
+    const sortedWorkouts = _.sortBy(this.state.workouts, function(o){
+      return new moment(o.date);
+    }).reverse();
+
+
     if(filter === "all"){
-     return this.state.workouts.length > 0 ? this.state.workouts.map(workout => 
+     return sortedWorkouts.length > 0 ? sortedWorkouts.map(workout => 
          
         <Table key={workout._id} striped bordered hover size="sm">
         {/* {console.log('today: ',moment(today).format('MM-DD-YYYY') === moment(workout.date).format('MM-DD-YYYY') )} */}
@@ -93,7 +101,7 @@ class Dashboard extends Component {
     }
 
     if(filter === "today"){
-     filteredworkout = this.state.workouts.filter(workout => 
+     filteredworkout = sortedWorkouts.filter(workout => 
           moment(workout.date).format('MM-DD-YYYY') === today);
           return filteredworkout.length > 0 ? filteredworkout.map(workout => 
          
