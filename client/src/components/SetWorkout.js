@@ -111,12 +111,12 @@ class SetWorkout extends Component {
 
   }
 
-  validateWorkout = (data) => {
+  validateWorkout = (data, workout) => {
 
     if(data.length > 0){
       this.setState({errors: data , showError: true})
     }else if(data.workoutExists){
-      this.setState({modalShow:true})
+      this.setState({modalShow:true, workout})
     }else{
       sessionStorage.removeItem('exercisesPicked');
       this.props.history.push('/dashboard')
@@ -125,13 +125,15 @@ class SetWorkout extends Component {
 
   updateWorkout = () => {
     const { workout } = this.state;
+
+    // console.log('workout to update: ', workout)
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ workout })
     };
 
-    fetch('http://localhost:5000/workout', requestOptions)
+    fetch('http://localhost:5000/workout-update', requestOptions)
       .then(res => res.json())
       .then( data => this.validateWorkout(data))
       .catch( err => console.log(err))

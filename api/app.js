@@ -49,7 +49,8 @@ app.use(passport.session());
 
 
 // const exercises = require('./routes/exercises')
-const workout = require('./routes/workout')
+const workout = require('./routes/workout');
+const workout_update = require('./routes/workout-update')
 const register = require('./routes/register')
 const login = require('./routes/login');
 const logout = require('./routes/logout');
@@ -57,6 +58,7 @@ const index = require('./routes/index')
 
 app.use('/', index);
 app.use('/workout', workout);
+app.use('/workout-update', workout_update);
 app.use('/register', register);
 app.use('/login', login);
 app.use('/logout', logout);
