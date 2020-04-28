@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import  {Container, ListGroup, Form, Button, Jumbotron}  from 'react-bootstrap';
-import ExercisesContext from '../ExercisesContext';
+import ReactSearchBox from 'react-search-box';
 import ExerciseDescriptionModal from './ExerciseDescriptionModal';
 import _ from 'lodash';
 import {withRouter } from "react-router-dom";
 
 
-// const ExercisesContext = React.createContext()
 class Home extends Component{
-  static contextType = ExercisesContext;
-  // const [modalShow, setModalShow] = React.useState(false);
 
   state = {
     exerciseType : 'all',
@@ -20,10 +17,11 @@ class Home extends Component{
     modalTitle : '',
     modalDescription: '',
     modalGif: '',
-    aboutProps: {}
+    aboutProps: {},
+    filtered : []
   }
 
-  // const [modalShow, setModalShow] = React.useState(false);
+  
 
   switchExercise = (e) => {
     const {value} = e.target;
@@ -54,8 +52,10 @@ class Home extends Component{
         exercisesPicked: this.state.exercisesPicked.filter(exercise => exercise.id !== id)
       })
     }
-    
+  }
 
+  componentDidMount(){
+    console.log('this.props.exercises: ',this.props.exercises)
   }
 
   handleSubmit = (e)=> {
@@ -65,13 +65,12 @@ class Home extends Component{
     this.props.history.push("/set-workout");
   }
 
-  displayExercises = () => {
-    // const allExercises  = this.context
-    const allExercises = _.orderBy(this.context,['name'], ['asc']);
-  
+  displayExercises = (allExercises) => {
+   
     return (
       <Container className="exercises">
       {/* <h1>{this.props.user}</h1> */}
+      
         <Form onSubmit={this.handleSubmit}>
         <ListGroup>
             {this.state.exerciseType === 'all' && allExercises.length > 0 && allExercises.map(exercise => <ListGroup.Item key={exercise._id}>
@@ -117,9 +116,9 @@ class Home extends Component{
     )
   }
 
-
+ 
   render(){
-    // console.log()
+    const allExercises = _.orderBy(this.props.exercises,['name'], ['asc']);
     return (
       <div>
       {/* <h1>{this.props.user && this.props.user.name}</h1> */}
@@ -127,8 +126,11 @@ class Home extends Component{
           <Button variant="primary" size="lg" type='button' value="all" onClick={this.switchExercise}>All</Button>{'  '}
           <Button variant="primary" size="lg" type='button' value="upper body" onClick={this.switchExercise}>Upper Body</Button>{'  '}
           <Button variant="primary" size="lg" type='button' value="lower body" onClick={this.switchExercise}>Lower Body</Button>
+          {/* <input onChange={this.handleSearchBarChange.bind(this, allExercises)} type="search" id="site-search" name="q"
+        aria-label="Search through site content"></input> */}
         </Jumbotron>
-        {this.displayExercises()}
+        
+        {this.displayExercises(allExercises)}
         <ExerciseDescriptionModal
           show={this.state.modalShow}
           onHide={() => this.setState({modalShow:false, modalTitle:'',modalDescription:'',modalGif:'' })}
