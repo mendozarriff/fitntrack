@@ -3,6 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootswatch/dist/darkly/bootstrap.min.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
+import 'react-calendar/dist/Calendar.css';
 import TopNavbar from './components/TopNavbar';
 import Home from './components/Home';
 import Register from './components/Register';

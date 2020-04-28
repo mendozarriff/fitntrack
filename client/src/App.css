@@ -28,6 +28,20 @@
   display: block!important;
 }
 
+.react-calendar__month-view__weekdays{
+  color: black;
+}
+
+/* .react-calendar__tile.testingTile{
+  background: red!important
+} */
+
+
+
+
+/* .react-calendar {
+  background: lightseagreen!important
+} */
 /* .list-group{
   padding-top: 135px;
 } */
