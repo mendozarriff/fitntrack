@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button, Container, Table } from 'react-bootstrap'
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -63,9 +63,6 @@ class Dashboard extends Component {
 
   handleCalendarChange = (date) => {
     this.setState({ date, filter:'by_date' })
-
-    // console.log(moment(date).format('MM/DD/YYYY'))
-
   } 
   viewWorkouts = (filter) => {
     let today = new Date();
@@ -81,13 +78,13 @@ class Dashboard extends Component {
 
     if(filter === "all"){
      return sortedWorkouts.length > 0 ? sortedWorkouts.map(workout => 
-         <>
-        <Table key={workout._id} striped bordered hover size="sm">
+         <Fragment key={workout._id}>
+        <Table striped bordered hover size="sm">
 
           <thead>
-            <tr style={{background:'yellow', color:'black'}}>
-              <th colSpan="12">{moment(workout.date).format('LL')}</th>
-            </tr>
+          <tr style={{background:'yellow', color:'black'}}>
+            <th colSpan="12"><span>{moment(workout.date).format('LL')}</span><span style={{float:'right'}}>{moment(workout.date).format('dddd')}</span></th>
+                </tr>
             <tr>
               <th>Name</th>
               <th>Sets</th>
@@ -107,8 +104,8 @@ class Dashboard extends Component {
         )}
           </tbody>
         </Table>
-          <Button>Copy Workout</Button>
-        </>
+          {/* <Button>Copy Workout</Button> */}
+        </Fragment>
     ) : <p>You have no workouts</p>
     }
 
@@ -116,19 +113,19 @@ class Dashboard extends Component {
      filteredworkout = sortedWorkouts.filter(workout => 
           moment(workout.date).format('MM-DD-YYYY') === today);
           return filteredworkout.length > 0 ? filteredworkout.map(workout => 
-            <>
+            <Fragment key={workout._id}>
             <Calendar 
             onChange = {this.handleCalendarChange}
             value = {this.state.date}
             tileClassName = "testingTile"
             tileContent = { ({ date, view }) => {
-               return this.state.workouts.map( workout => view === 'month' && moment(date).format('MM/DD/YYYY') === moment(workout.date).format('MM/DD/YYYY') ? <p>&#x1F3CB;</p> : null   )
+               return this.state.workouts.map( workout => view === 'month' && moment(date).format('MM/DD/YYYY') === moment(workout.date).format('MM/DD/YYYY') ? <span key={workout._id} role='img' aria-label="emoji">&#x1F3CB;</span> : null   )
             }}
           />
             <Table key={workout._id} striped bordered hover size="sm">
               <thead>
                 <tr style={{background:'yellow', color:'black'}}>
-                  <th colSpan="12">{moment(workout.date).format('LL')}</th>
+                <th colSpan="12"><span>{moment(workout.date).format('LL')}</span><span style={{float:'right'}}>{moment(workout.date).format('dddd')}</span></th>
                 </tr>
                 <tr>
                   <th>Name</th>
@@ -149,7 +146,7 @@ class Dashboard extends Component {
             )}
               </tbody>
             </Table>
-            </>
+            </Fragment>
         ): <p> You have no workout for today </p>
     }
 
@@ -157,20 +154,20 @@ class Dashboard extends Component {
       filteredworkout = sortedWorkouts.filter(workout => 
         moment(workout.date).format('MM/DD/YYYY') === moment(this.state.date).format('MM/DD/YYYY'));
         return filteredworkout.length > 0 ? filteredworkout.map(workout => 
-          <>
+          <Fragment key={workout._id}>
           <Calendar 
           onChange = {this.handleCalendarChange}
           value = {this.state.date}
           tileClassName = "testingTile"
           tileContent = { ({ date, view }) => {
-             return this.state.workouts.map( workout => view === 'month' && moment(date).format('MM/DD/YYYY') === moment(workout.date).format('MM/DD/YYYY') ? <p>&#x1F3CB;</p> : null   )
+             return this.state.workouts.map( workout => view === 'month' && moment(date).format('MM/DD/YYYY') === moment(workout.date).format('MM/DD/YYYY') ? <span key={workout._id} role='img' aria-label="emoji">&#x1F3CB;</span>: null   )
           }}
         />
           <Table key={workout._id} striped bordered hover size="sm">
             <thead>
-              <tr style={{background:'yellow', color:'black'}}>
-                <th colSpan="12">{moment(workout.date).format('LL')}</th>
-              </tr>
+            <tr style={{background:'yellow', color:'black'}}>
+            <th colSpan="12"><span>{moment(workout.date).format('LL')}</span><span style={{float:'right'}}>{moment(workout.date).format('dddd')}</span></th>
+                </tr>
               <tr>
                 <th>Name</th>
                 <th>Sets</th>
@@ -190,13 +187,13 @@ class Dashboard extends Component {
           )}
             </tbody>
           </Table>
-          </>
+          </Fragment>
       ): <><Calendar 
       onChange = {this.handleCalendarChange}
       value = {this.state.date}
       tileClassName = "testingTile"
       tileContent = { ({ date, view }) => {
-         return this.state.workouts.map( workout => view === 'month' && moment(date).format('MM/DD/YYYY') === moment(workout.date).format('MM/DD/YYYY') ? <p>&#x1F3CB;</p> : null   )
+         return this.state.workouts.map( workout => view === 'month' && moment(date).format('MM/DD/YYYY') === moment(workout.date).format('MM/DD/YYYY') ? <span key={workout._id} role='img' aria-label="emoji">&#x1F3CB;</span> : null   )
       }}
     /><p>There is no workout for this day</p> </>
     }

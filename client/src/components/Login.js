@@ -29,7 +29,7 @@ class Login extends Component{
   }
 
   authorizeUser = (data) => {
-    if(data.authorized){
+    if(data.user){
       this.setState({
         disable: true,
         showSpinner: true
@@ -45,7 +45,7 @@ class Login extends Component{
     }else{
       this.setState({
         visible: true,
-        error: data.error
+        error: data.info.message
       })
     }
     
@@ -56,33 +56,18 @@ class Login extends Component{
 
     const user = this.state.user
 
-    // console.log(user)
-
-    // const sendData = {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json'},
-    //   body: JSON.stringify(user)
-    // }
+  
 
     axios.post('http://localhost:5000/login', user, { withCredentials: true })
     .then(res => {
+
       if(res.status === 200){
-        // this.props.updateUser(res.data)
-
-        // console.log(this.props.updateUser
-        // this.props.updateUser.loggedIn = true
-        this.props.history.push("/dashboard")
+        this.authorizeUser(res.data)
       }
+  
     }).catch(err => {
-      console.log('login error: ');
       console.log(err);
-    })
-
-      // fetch('http://localhost:5000/login',sendData)
-      // .then(res => res.json())
-      // .then( data => this.authorizeUser(data) )
-      // .catch(err => console.log('err: ', err))
-    
+    })    
   }
   
   render(){
@@ -138,6 +123,9 @@ class Login extends Component{
               />
                 </button>
               </form>
+              <p className="lead mt-4">
+              <Link to="reset_password">Forgot password?</Link>
+              </p>
               <p className="lead mt-4">
                 No Account? <Link to='/register'>Register</Link>
               </p>

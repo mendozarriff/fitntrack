@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'fitntrackofficial@gmail.com',
+    pass: 'fitntrack123'
+  }
+});
+
+
 
 // User Model
 const User = require('../models/user.model');

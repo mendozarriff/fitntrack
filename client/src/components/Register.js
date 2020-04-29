@@ -40,7 +40,7 @@ class Register extends Component{
 
     setTimeout(
       function() {
-        this.props.history.push("/dashboard")
+        this.props.history.push("/login")
       }
       .bind(this),
       2000
@@ -66,7 +66,6 @@ class Register extends Component{
       .catch(err => console.log(err))
   }
   render(){
-    console.log(this.state.errors)
     return(
       <div style={{marginTop: '80px'}}>
       <div className="row mt-5">

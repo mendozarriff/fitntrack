@@ -32,6 +32,23 @@
   color: black;
 }
 
+.searchbar_container {
+  position: relative;
+}
+
+.searchbar_container img{
+  width: 25px;
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  display: none;
+}
+
+
+.searchbar_container img.show{
+  display: block;
+}
+
 /* .react-calendar__tile.testingTile{
   background: red!important
 } */

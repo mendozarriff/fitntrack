@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import  {Container, ListGroup, Form, Button, Jumbotron}  from 'react-bootstrap';
-import SearchBar from './SearchBar';
-import ReactSearchBox from 'react-search-box';
 import ExerciseDescriptionModal from './ExerciseDescriptionModal';
 import _ from 'lodash';
 import {withRouter } from "react-router-dom";
@@ -19,7 +17,7 @@ class Home extends Component{
     modalDescription: '',
     modalGif: '',
     aboutProps: {},
-    filtered : []
+    filtered : [],
   }
 
   
@@ -55,9 +53,6 @@ class Home extends Component{
     }
   }
 
-  componentDidMount(){
-    console.log('this.props.filtered: ',this.props.filtered)
-  }
 
   handleSubmit = (e)=> {
     e.preventDefault();
@@ -71,7 +66,7 @@ class Home extends Component{
     return (
       <Container className="exercises" >
           <Form>
-            <Form.Group controlId="searchBar">
+            <Form.Group controlId="searchBar" className="searchbar_container">
               <Form.Control type="text" placeholder="search exercise..." onChange={this.props.handleSearchBarChange}  />
             </Form.Group>
           </Form>
@@ -123,18 +118,13 @@ class Home extends Component{
  
   render(){
     const allExercises = _.orderBy(this.props.filtered,['name'], ['asc']);
-    // console.log('allExercises: ', allExercises)
-    // console.log('this.props.data:', this.props.data)
-    // console.log('this.props.filtered:', this.props.filtered)
     return (
       <div>
-      {/* <h1>{this.props.user && this.props.user.name}</h1> */}
+
         <Jumbotron className="exercise_types" style={{textAlign:'center'}}>
           <Button variant="primary" size="lg" type='button' value="all" onClick={this.switchExercise}>All</Button>{'  '}
           <Button variant="primary" size="lg" type='button' value="upper body" onClick={this.switchExercise}>Upper Body</Button>{'  '}
           <Button variant="primary" size="lg" type='button' value="lower body" onClick={this.switchExercise}>Lower Body</Button>
-          {/* <input onChange={this.handleSearchBarChange.bind(this, allExercises)} type="search" id="site-search" name="q"
-        aria-label="Search through site content"></input> */}
         </Jumbotron>
         
         {this.displayExercises(allExercises)}

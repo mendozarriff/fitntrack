@@ -4,12 +4,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootswatch/dist/darkly/bootstrap.min.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import 'react-calendar/dist/Calendar.css';
-import { Container, Form} from 'react-bootstrap';
 import TopNavbar from './components/TopNavbar';
 import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
-import { ExercisesProvider } from './ExercisesContext';
+import ResetPassword from './components/ResetPassword';
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,7 +16,6 @@ import {
 } from "react-router-dom";
 import SetWorkout from './components/SetWorkout';
 import Dashboard from './components/Dashboard';
-import axios from 'axios';
 
 class App extends Component {
 
@@ -79,12 +77,7 @@ handleChange = (e) => {
             // check to see if the current list item includes the search term
             // If it does, it will be added to newList. Using lowercase eliminates
             // issues with capitalization in search terms and search content
-            // let myObject=<span style="color: red;">{filter}</span>;
-
-            // console.log('filter: ', myObject.props.children)
           return lc.includes(filter);
-
-
         });
       } else {
               // If the search bar is empty, set newList to original task list
@@ -117,7 +110,6 @@ request = async () => {
       <div className="App">
       <Router>
         <TopNavbar user={this.state.user}  />
-       
         <Switch>
           <Route path="/set-workout">
               <SetWorkout userID={this.state.user._id} />
@@ -132,7 +124,9 @@ request = async () => {
          <Route path="/login">
               <Login />
           </Route>
-       
+          <Route path="/reset_password">
+            <ResetPassword />
+          </Route>
           <Route path="/">
             <Home filtered={filtered} data={this.state.exercises} handleSearchBarChange={this.handleChange} />
           </Route>
