@@ -2,7 +2,37 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class ResetPassword extends Component {
+  
+  state = {
+    user : {
+      email: '',
+      password: '',
+      password2: ''
+    }
+  }
+
+  handleChange = (e) => {
+// console.log(e.target)
+    const { name, value } = e.target
+
+    console.log(e.target)
+    this.setState({
+      
+      user: {
+        ...this.state.user,
+        [name]:value
+      }
+    })
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('handle submit')
+    console.log(this.state.user)
+  }
+
   render(){
+    
     return <div>
           <div style={{marginTop: '80px'}}>
         <div className="row mt-5">
@@ -17,45 +47,45 @@ class ResetPassword extends Component {
               </Alert>
               } */}
               
-              {/* <form method="POST" onSubmit = {this.handleSubmit}> */}
-              <form method="POST">
+              <form method="POST" onSubmit = {this.handleSubmit}>
+              {/* <form method="POST"> */}
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
                   <input
-                    // onChange={this.handleChange}
+                    onChange={this.handleChange}
                     type="email"
                     id="email"
                     name="email"
                     className="form-control"
                     placeholder="Enter Email"
                     autoComplete ="email"
-                    // value={this.state.user.email}
+                    value={this.state.user.email}
                   />
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">New Password</label>
                   <input
-                    // onChange={this.handleChange}
+                    onChange={this.handleChange}
                     type="password"
                     id="password"
                     name="password"
                     className="form-control"
                     placeholder="Enter Password"
                     autoComplete ="current-password"
-                    // value={this.state.user.password}
+                    value={this.state.user.password}
                   />
                 </div>
                 <div className="form-group">
                   <label htmlFor="password2">Confirm New Password</label>
                   <input
-                    // onChange={this.handleChange}
+                    onChange={this.handleChange}
                     type="password"
                     id="password2"
                     name="password2"
                     className="form-control"
                     placeholder="Re-Enter Password"
                     autoComplete ="current-password"
-                    // value={this.state.user.password}
+                    value={this.state.user.password2}
                   />
                 </div>
                 {/* <button disabled={this.state.disable} type="submit" style={{position:'relative'}} className="btn btn-primary btn-block">Login */}
