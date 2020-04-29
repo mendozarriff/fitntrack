@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import  {Container, ListGroup, Form, Button, Jumbotron}  from 'react-bootstrap';
+import SearchBar from './SearchBar';
 import ReactSearchBox from 'react-search-box';
 import ExerciseDescriptionModal from './ExerciseDescriptionModal';
 import _ from 'lodash';
@@ -55,7 +56,7 @@ class Home extends Component{
   }
 
   componentDidMount(){
-    console.log('this.props.exercises: ',this.props.exercises)
+    console.log('this.props.filtered: ',this.props.filtered)
   }
 
   handleSubmit = (e)=> {
@@ -66,11 +67,14 @@ class Home extends Component{
   }
 
   displayExercises = (allExercises) => {
-   
+
     return (
-      <Container className="exercises">
-      {/* <h1>{this.props.user}</h1> */}
-      
+      <Container className="exercises" >
+          <Form>
+            <Form.Group controlId="searchBar">
+              <Form.Control type="text" placeholder="search exercise..." onChange={this.props.handleSearchBarChange}  />
+            </Form.Group>
+          </Form>
         <Form onSubmit={this.handleSubmit}>
         <ListGroup>
             {this.state.exerciseType === 'all' && allExercises.length > 0 && allExercises.map(exercise => <ListGroup.Item key={exercise._id}>
@@ -118,7 +122,10 @@ class Home extends Component{
 
  
   render(){
-    const allExercises = _.orderBy(this.props.exercises,['name'], ['asc']);
+    const allExercises = _.orderBy(this.props.filtered,['name'], ['asc']);
+    // console.log('allExercises: ', allExercises)
+    // console.log('this.props.data:', this.props.data)
+    // console.log('this.props.filtered:', this.props.filtered)
     return (
       <div>
       {/* <h1>{this.props.user && this.props.user.name}</h1> */}
